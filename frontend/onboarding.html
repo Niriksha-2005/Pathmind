@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PathMind — Get Started</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">PathMind</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+    </div>
+  </nav>
+
+  <section class="onboarding">
+    <div class="onboarding-container">
+
+      <div class="onboarding-header">
+        <h1>Let's build your roadmap</h1>
+        <p>Tell us about yourself and we will generate a personalized career plan in seconds.</p>
+      </div>
+
+      <div class="upload-box" id="uploadBox">
+        <p>Click to upload your resume PDF</p>
+        <input type="file" id="resumeFile" accept=".pdf" style="opacity:0; position:absolute; width:1px; height:1px;">
+        <button class="btn-secondary" id="uploadBtn" style="cursor:pointer;">
+            Choose PDF file
+        </button>
+      </div>
+      <!-- <div class="resume-upload-section">
+        <h3>Step 1 — Upload your resume (optional)</h3>
+        <p class="upload-subtitle">We will auto-fill your skills from your resume</p>
+        <div class="upload-box" id="uploadBox">
+        <p>Click to upload your resume PDF</p>
+        <label for="resumeFile" class="btn-secondary" style="cursor:pointer; display:inline-block;">
+            Choose PDF file
+        </label>
+        <input type="file" id="resumeFile" accept=".pdf" style="display:none;">
+        </div>
+        <div id="resumeResult" class="resume-result hidden"></div>
+      </div> -->
+
+      <div class="form-section">
+        <h3>Step 2 — Fill your details</h3>
+
+        <div class="form-group">
+          <label>Full name</label>
+          <input type="text" id="name" placeholder="Enter your full name">
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="Enter your email">
+        </div>
+
+        <div class="form-group">
+          <label>Branch</label>
+          <select id="branch">
+            <option value="">Select your branch</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Electronics and Communication">Electronics and Communication</option>
+            <option value="Information Technology">Information Technology</option>
+            <option value="Mechanical Engineering">Mechanical Engineering</option>
+            <option value="Civil Engineering">Civil Engineering</option>
+            <option value="MBA">MBA</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Career goal</label>
+          <select id="goal">
+            <option value="">Select your goal</option>
+            <option value="Product based company SDE">Product based company SDE</option>
+            <option value="Service based company">Service based company</option>
+            <option value="Data Science and ML">Data Science and ML</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Government job">Government job</option>
+            <option value="Higher studies">Higher studies</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Target company</label>
+          <input type="text" id="targetCompany" placeholder="e.g. Google, Microsoft, TCS">
+        </div>
+
+        <div class="form-group">
+          <label>Available hours per day</label>
+          <select id="hoursPerDay">
+            <option value="">Select hours</option>
+            <option value="1">1 hour</option>
+            <option value="2">2 hours</option>
+            <option value="3">3 hours</option>
+            <option value="4">4 hours</option>
+            <option value="6">6 hours</option>
+            <option value="8">8 hours</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Target months to prepare</label>
+          <select id="targetMonths">
+            <option value="">Select months</option>
+            <option value="1">1 month</option>
+            <option value="2">2 months</option>
+            <option value="3">3 months</option>
+            <option value="4">4 months</option>
+            <option value="6">6 months</option>
+          </select>
+        </div>
+
+        <button class="btn-primary full-width" id="generateBtn" onclick="generateRoadmap()">
+          Generate my roadmap
+        </button>
+
+      </div>
+
+    </div>
+  </section>
+
+  <script src="js/onboarding.js"></script>
+</body>
+</html>
+
+
+
+
+

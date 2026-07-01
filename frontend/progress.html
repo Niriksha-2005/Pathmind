@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PathMind — Your Progress</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">PathMind</div>
+    <div class="nav-links">
+      <a href="roadmap.html">Roadmap</a>
+      <a href="schedule.html">Today's Plan</a>
+      <a href="readiness.html">Readiness Score</a>
+    </div>
+  </nav>
+
+  <section class="progress-section">
+    <div class="progress-header">
+      <h1>Your progress</h1>
+      <p id="progressSubtitle">Loading your progress...</p>
+    </div>
+
+    <div class="progress-circle-container">
+      <div class="progress-circle" id="progressCircle">
+        <span id="progressPercentage">0%</span>
+      </div>
+      <div class="progress-stats">
+        <div class="stat-box">
+          <h3 id="completedCount">0</h3>
+          <p>Topics completed</p>
+        </div>
+        <div class="stat-box">
+          <h3 id="totalCount">0</h3>
+          <p>Total topics</p>
+        </div>
+        <div class="stat-box">
+          <h3 id="remainingCount">0</h3>
+          <p>Remaining</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="completed-topics" id="completedTopics">
+    </div>
+  </section>
+
+  <script src="js/progress.js"></script>
+</body>
+</html>

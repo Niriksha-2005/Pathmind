@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PathMind — Today's Plan</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">PathMind</div>
+    <div class="nav-links">
+      <a href="roadmap.html">Roadmap</a>
+      <a href="progress.html">Progress</a>
+      <a href="readiness.html">Readiness Score</a>
+    </div>
+  </nav>
+
+  <section class="schedule-section">
+    <div class="schedule-header">
+      <h1>What's today's plan?</h1>
+      <p>Tell us how much time you have today and we will build your perfect study plan.</p>
+    </div>
+
+    <div class="time-selector">
+      <button class="time-btn" onclick="getSchedule(30)">30 mins</button>
+      <button class="time-btn" onclick="getSchedule(60)">1 hour</button>
+      <button class="time-btn" onclick="getSchedule(120)">2 hours</button>
+      <button class="time-btn" onclick="getSchedule(240)">4 hours</button>
+      <button class="time-btn" onclick="getSchedule(480)">Full day</button>
+    </div>
+
+    <div id="scheduleResult" class="schedule-result">
+      <p style="color:#aaa; text-align:center;">Select your available time above to get today's plan</p>
+    </div>
+  </section>
+
+  <script src="js/schedule.js"></script>
+</body>
+</html>
