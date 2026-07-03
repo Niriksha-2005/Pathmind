@@ -1,5 +1,4 @@
-const BASE_URL = 'http://localhost:5000/api'
-
+const BASE_URL = 'https://pathmind-awrt.onrender.com/api'
 const userId = localStorage.getItem('pathmind_user_id')
 
 if (!userId) {
