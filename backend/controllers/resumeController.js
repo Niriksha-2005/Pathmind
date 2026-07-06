@@ -1,6 +1,11 @@
 const multer = require('multer')
 const Groq = require('groq-sdk')
 const fs = require('fs')
+const path = require('path')
+
+if (!fs.existsSync('uploads')) {
+  fs.mkdirSync('uploads')
+}
 const { PdfReader } = require('pdfreader')
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
