@@ -1,21 +1,54 @@
+// const BASE_URL = 'https://pathmind-awrt.onrender.com/api'
+
+// let extractedSkills = []
+
+// // Upload button click → triggers file input
+// document.getElementById('uploadBtn').addEventListener('click', () => {
+//   const input = document.getElementById('resumeFile')
+//   input.value = ''
+//   input.click()
+// })
+
+// // File selected → analyse resume
+// document.getElementById('resumeFile').addEventListener('change', async (e) => {
+//   const file = e.target.files[0]
+//   if (!file) return
+
+//   const uploadBox = document.getElementById('uploadBox')
+//   uploadBox.querySelector('p').textContent = 'Analysing your resume...'
+
+//   const formData = new FormData()
+//   formData.append('resume', file)
+
+//   try {
+//     const response = await fetch(`${BASE_URL}/resume/analyse`, {
+//       method: 'POST',
+//       body: formData
+//     })
+
+//     const data = await response.json()
+
+//     if (data.analysis) {
+//       extractedSkills = data.analysis.skills
+//       showResumeResult(data.analysis)
+//       uploadBox.innerHTML = '<p style="color: #6c63ff;">✓ Resume analysed successfully</p>'
+//     }
+
+//   } catch (err) {
+//     uploadBox.innerHTML = '<p style="color: red;">Error analysing resume. Please try again.</p>'
+//     console.log('Resume error:', err)
+//   }
+// })
 const BASE_URL = 'https://pathmind-awrt.onrender.com/api'
 
 let extractedSkills = []
 
-// Upload button click → triggers file input
-document.getElementById('uploadBtn').addEventListener('click', () => {
-  const input = document.getElementById('resumeFile')
-  input.value = ''
-  input.click()
-})
-
-// File selected → analyse resume
 document.getElementById('resumeFile').addEventListener('change', async (e) => {
   const file = e.target.files[0]
   if (!file) return
 
-  const uploadBox = document.getElementById('uploadBox')
-  uploadBox.querySelector('p').textContent = 'Analysing your resume...'
+  document.getElementById('uploadText').textContent = 'Analysing your resume...'
+  document.getElementById('uploadBox').style.borderColor = '#6c63ff'
 
   const formData = new FormData()
   formData.append('resume', file)
@@ -31,11 +64,13 @@ document.getElementById('resumeFile').addEventListener('change', async (e) => {
     if (data.analysis) {
       extractedSkills = data.analysis.skills
       showResumeResult(data.analysis)
-      uploadBox.innerHTML = '<p style="color: #6c63ff;">✓ Resume analysed successfully</p>'
+      document.getElementById('uploadText').textContent = '✓ Resume analysed successfully'
+      document.getElementById('uploadBox').style.borderColor = '#4caf50'
     }
 
   } catch (err) {
-    uploadBox.innerHTML = '<p style="color: red;">Error analysing resume. Please try again.</p>'
+    document.getElementById('uploadText').textContent = 'Error analysing resume. Please try again.'
+    document.getElementById('uploadBox').style.borderColor = 'red'
     console.log('Resume error:', err)
   }
 })

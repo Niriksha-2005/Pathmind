@@ -26,10 +26,12 @@
       <div class="resume-upload-section">
         <h3>Step 1 — Upload your resume (optional)</h3>
         <p class="upload-subtitle">We will auto-fill your skills from your resume</p>
-        <div class="upload-box" id="uploadBox">
-          <p>Click to upload your resume PDF</p>
-          <input type="file" id="resumeFile" accept=".pdf">
-        </div>
+        <label for="resumeFile" class="upload-box" id="uploadBox">
+         <div class="upload-icon">📄</div>
+         <p id="uploadText">Click here to upload your resume PDF</p>
+         <span class="upload-hint">PDF files only</span>
+         <input type="file" id="resumeFile" accept=".pdf" style="display:none;">
+        </label>
         <div id="resumeResult" class="resume-result hidden"></div>
       </div>
         
