@@ -14,11 +14,7 @@ dotenv.config();
 const app=express();
 
 
-app.use(cors({
-  origin: ['https://dancing-daifuku-169227.netlify.app', 'http://localhost:5500', 'http://127.0.0.1:5500'],
-  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
-  credentials: true
-}))
+app.use(cors())
 app.use(express.json());
 
 app.get('/',(req,res)=>{
