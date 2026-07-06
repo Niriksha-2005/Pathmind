@@ -244,13 +244,31 @@ body {
 .upload-box {
   border: 2px dashed #333;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 2.5rem;
   text-align: center;
   color: #aaa;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  transition: border-color 0.2s;
+  margin-bottom: 1rem;
 }
 
-.upload-box p {
-  margin-bottom: 1rem;
+.upload-box:hover {
+  border-color: #6c63ff;
+}
+
+.upload-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+.upload-hint {
+  font-size: 0.8rem;
+  color: #555;
+  display: block;
+  margin-top: 0.5rem;
 }
 
 .resume-result {
