@@ -15,7 +15,7 @@ document.getElementById('resumeFile').addEventListener('change', async (e) => {
   if (!file) return
 
   const uploadBox = document.getElementById('uploadBox')
-  uploadBox.innerHTML = '<p>Analysing your resume...</p>'
+  uploadBox.querySelector('p').textContent = 'Analysing your resume...'
 
   const formData = new FormData()
   formData.append('resume', file)
