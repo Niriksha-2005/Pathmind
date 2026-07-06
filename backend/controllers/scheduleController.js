@@ -10,7 +10,9 @@ const getDailySchedule = (req, res) => {
     if (err) return res.status(500).json({ error: err.message })
     if (roadmap.length === 0) return res.status(404).json({ error: 'Roadmap not found' })
 
-    const allTopics = JSON.parse(roadmap[0].topics)
+    const allTopics = typeof roadmap[0].topics === 'string' 
+      ? JSON.parse(roadmap[0].topics) 
+      : roadmap[0].topics
 
     db.query(progressQuery, [user_id], (err, completedTopics) => {
       if (err) return res.status(500).json({ error: err.message })
