@@ -781,3 +781,46 @@ body {
   color: #aaa;
   margin-top: 0.2rem;
 }
+
+.auth-section {
+  padding: 4rem 2rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.auth-container {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 16px;
+  padding: 2.5rem;
+}
+
+.auth-header {
+  margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+.auth-switch {
+  text-align: center;
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+.auth-switch a {
+  color: #6c63ff;
+  text-decoration: none;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
