@@ -8,6 +8,8 @@ const progressRoutes = require('./routes/progressRoutes')
 const scheduleRoutes = require('./routes/scheduleRoutes')
 const readinessRoutes = require('./routes/readinessRoutes')
 const resumeRoutes = require('./routes/resumeRoutes')
+const authRoutes = require('./routes/authRoutes')
+
 
 dotenv.config();
 
@@ -21,13 +23,16 @@ app.get('/',(req,res)=>{
     res.json({ message: 'PathMind backend is running' })
 })
 
+
+
+
 app.use('/api/users', userRoutes)
 app.use('/api/roadmap', roadmapRoutes)
 app.use('/api/progress', progressRoutes)
 app.use('/api/schedule', scheduleRoutes)
 app.use('/api/readiness', readinessRoutes)
 app.use('/api/resume', resumeRoutes)
-
+app.use('/api/auth', authRoutes)
 
 const PORT =process.env.PORT || 5000
 app.listen(PORT,()=>{
