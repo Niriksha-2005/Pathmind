@@ -14,6 +14,11 @@
       <a href="progress.html">Progress</a>
       <a href="schedule.html">Today's Plan</a>
       <a href="readiness.html">Readiness Score</a>
+      <div class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+        🔔 <span class="notif-count" id="notifCount">0</span>
+        <div class="notification-dropdown hidden" id="notificationDropdown">
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -41,5 +46,6 @@
   </div>
 
   <script src="js/roadmap.js"></script>
+  <script src="js/notifications.js"></script>
 </body>
 </html>

@@ -10,6 +10,8 @@ const readinessRoutes = require('./routes/readinessRoutes')
 const resumeRoutes = require('./routes/resumeRoutes')
 const authRoutes = require('./routes/authRoutes')
 const quizRoutes = require('./routes/quizRoutes')
+const notificationRoutes = require('./routes/notificationRoutes')
+
 
 
 
@@ -36,6 +38,7 @@ app.use('/api/readiness', readinessRoutes)
 app.use('/api/resume', resumeRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/quiz', quizRoutes)
+app.use('/api/notifications', notificationRoutes)
 
 const PORT =process.env.PORT || 5000
 app.listen(PORT,()=>{
