@@ -27,6 +27,19 @@
     </div>
   </section>
 
+  <div id="quizModal" class="quiz-modal hidden">
+    <div class="quiz-modal-content">
+      <div class="quiz-modal-header">
+        <h2 id="quizTopic">Quiz</h2>
+        <button onclick="closeQuizModal()" class="close-btn">✕</button>
+      </div>
+      <div id="quizBody" class="quiz-body"></div>
+      <div class="quiz-footer">
+        <button id="submitQuizBtn" class="btn-primary" onclick="submitQuiz()">Submit answers</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/roadmap.js"></script>
 </body>
 </html>
