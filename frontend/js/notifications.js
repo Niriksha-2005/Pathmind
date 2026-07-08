@@ -1,11 +1,10 @@
 const NOTIF_BASE_URL = 'https://pathmind-awrt.onrender.com/api'
-const userId = localStorage.getItem('pathmind_user_id')
-
+const notifUserId = localStorage.getItem('pathmind_user_id')
 async function loadNotifications() {
-  if (!userId) return
+  if (!notifUserId) return
 
   try {
-    const response = await fetch(`${NOTIF_BASE_URL}/notifications/${userId}`)
+    const response = await fetch(`${NOTIF_BASE_URL}/notifications/${notifUserId}`)
     const data = await response.json()
 
     if (!data.notifications) return
