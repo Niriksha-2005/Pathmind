@@ -966,3 +966,60 @@ body {
   font-size: 1.1rem;
   flex-shrink: 0;
 }
+
+.mock-questions-section {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #222;
+}
+
+.mock-header {
+  margin-bottom: 1.5rem;
+}
+
+.mock-header h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.mock-card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.mock-question {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+  line-height: 1.6;
+}
+
+.mock-hint {
+  font-size: 0.85rem;
+  color: #6c63ff;
+  margin-bottom: 1rem;
+}
+
+.show-answer-btn {
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.mock-answer {
+  margin-top: 1rem;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.mock-answer.hidden {
+  display: none;
+}

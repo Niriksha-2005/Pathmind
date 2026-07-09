@@ -22,6 +22,7 @@ async function getSchedule(minutes) {
 
     const data = await response.json()
     renderSchedule(data)
+    loadMockQuestions()
 
   } catch (err) {
     resultDiv.innerHTML = '<p style="color:red; text-align:center;">Error loading schedule. Please try again.</p>'
@@ -74,4 +75,64 @@ function renderTaskCard(t) {
       ${t.suggested_minutes ? `<div class="task-time">${t.suggested_minutes} mins</div>` : ''}
     </div>
   `
+}
+
+async function loadMockQuestions() {
+  const mockDiv = document.getElementById('mockQuestions')
+  mockDiv.innerHTML = '<p style="color:#aaa; text-align:center;">Loading interview questions...</p>'
+
+  try {
+    const response = await fetch(`${BASE_URL}/quiz/mock`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId })
+    })
+
+    const data = await response.json()
+
+    if (data.error) {
+      mockDiv.innerHTML = '<p style="color:#aaa;">No mock questions available yet.</p>'
+      return
+    }
+
+    let html = `
+      <div class="mock-header">
+        <h3>🎯 Mock Interview Practice</h3>
+        <p style="color:#aaa; font-size:0.9rem;">Topic: ${data.topic}</p>
+      </div>
+    `
+
+    data.questions.forEach((q, index) => {
+      html += `
+        <div class="mock-card">
+          <p class="mock-question">Q${index + 1}. ${q.question}</p>
+          <p class="mock-hint">💡 Hint: ${q.hint}</p>
+          <button class="btn-secondary show-answer-btn" onclick="toggleAnswer(${index})">
+            Show Answer
+          </button>
+          <div class="mock-answer hidden" id="answer-${index}">
+            <p>${q.answer}</p>
+          </div>
+        </div>
+      `
+    })
+
+    mockDiv.innerHTML = html
+
+  } catch (err) {
+    mockDiv.innerHTML = '<p style="color:#aaa;">Error loading questions.</p>'
+  }
+}
+
+function toggleAnswer(index) {
+  const answerDiv = document.getElementById(`answer-${index}`)
+  const btn = answerDiv.previousElementSibling
+
+  if (answerDiv.classList.contains('hidden')) {
+    answerDiv.classList.remove('hidden')
+    btn.textContent = 'Hide Answer'
+  } else {
+    answerDiv.classList.add('hidden')
+    btn.textContent = 'Show Answer'
+  }
 }
