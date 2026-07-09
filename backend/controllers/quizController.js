@@ -159,6 +159,7 @@ const getMockQuestions = async (req, res) => {
 
         let text = completion.choices[0].message.content
         text = text.replace(/```json/g, '').replace(/```/g, '').trim()
+        text = text.replace(/[\x00-\x1F\x7F]/g, ' ')
         const questions = JSON.parse(text)
 
         res.json({
