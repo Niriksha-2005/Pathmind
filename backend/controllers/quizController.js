@@ -96,4 +96,81 @@ const submitQuiz = async (req, res) => {
   }
 }
 
-module.exports = { generateQuiz, submitQuiz }
+const getMockQuestions = async (req, res) => {
+  const { user_id } = req.body
+
+  const progressQuery = `SELECT topic_name FROM progress WHERE user_id = ? AND status = 'completed' ORDER BY completed_at DESC LIMIT 1`
+  const roadmapQuery = `SELECT topics FROM roadmaps WHERE user_id = ?`
+
+  db.query(roadmapQuery, [user_id], (err, roadmap) => {
+    if (err) return res.status(500).json({ error: err.message })
+    if (roadmap.length === 0) return res.status(404).json({ error: 'Roadmap not found' })
+
+    const allTopics = typeof roadmap[0].topics === 'string'
+      ? JSON.parse(roadmap[0].topics)
+      : roadmap[0].topics
+
+    db.query(progressQuery, [user_id], async (err, recent) => {
+      if (err) return res.status(500).json({ error: err.message })
+
+      let currentTopic = allTopics[0].topic
+
+      if (recent.length > 0) {
+        const lastCompleted = recent[0].topic_name
+        const lastIndex = allTopics.findIndex(t => t.topic === lastCompleted)
+        if (lastIndex !== -1 && lastIndex + 1 < allTopics.length) {
+          currentTopic = allTopics[lastIndex + 1].topic
+        }
+      }
+
+      try {
+        const completion = await groq.chat.completions.create({
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            {
+              role: 'user',
+              content: `
+              You are a technical interviewer at a product based company like Google or Microsoft.
+
+              The student is currently studying: ${currentTopic}
+
+              Generate exactly 3 interview questions for this topic that would be asked in a real placement interview for Indian engineering students.
+
+              Return ONLY a JSON array with no extra text, no markdown, no explanation.
+
+              Format exactly like this:
+              [
+                {
+                  "question": "interview question here",
+                  "hint": "one line hint to think about",
+                  "answer": "concise but complete answer in 3-4 lines"
+                }
+              ]
+
+              Rules:
+              - Mix easy, medium and hard questions
+              - Make them practical and coding focused
+              - Return exactly 3 questions
+              - Only return the JSON array
+              `
+            }
+          ]
+        })
+
+        let text = completion.choices[0].message.content
+        text = text.replace(/```json/g, '').replace(/```/g, '').trim()
+        const questions = JSON.parse(text)
+
+        res.json({
+          topic: currentTopic,
+          questions
+        })
+
+      } catch (err) {
+        res.status(500).json({ error: err.message })
+      }
+    })
+  })
+}
+
+module.exports = { generateQuiz, submitQuiz, getMockQuestions }
