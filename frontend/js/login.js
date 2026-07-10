@@ -2,9 +2,16 @@ const BASE_URL = 'https://pathmind-awrt.onrender.com/api'
 
 function togglePassword(id) {
   const input = document.getElementById(id)
-  input.type = input.type === 'password' ? 'text' : 'password'
+  const icon = input.nextElementSibling.querySelector('svg')
+  
+  if (input.type === 'password') {
+    input.type = 'text'
+    icon.setAttribute('stroke', '#6c63ff')
+  } else {
+    input.type = 'password'
+    icon.setAttribute('stroke', '#666')
+  }
 }
-
 
 async function login() {
   const email = document.getElementById('email').value.trim()

@@ -1039,6 +1039,7 @@ body {
   position: absolute;
   right: 1rem;
   cursor: pointer;
-  font-size: 1.1rem;
-  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
