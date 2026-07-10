@@ -30,7 +30,10 @@
 
       <div class="form-group">
         <label>Password</label>
-        <input type="password" id="password" placeholder="Enter your password">
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="Enter your password">
+          <span class="eye-icon" onclick="togglePassword('password')">👁️</span>
+        </div>
       </div>
 
       <button class="btn-primary full-width" id="loginBtn" onclick="login()">

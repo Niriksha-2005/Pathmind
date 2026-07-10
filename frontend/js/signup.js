@@ -2,6 +2,11 @@ const BASE_URL = 'https://pathmind-awrt.onrender.com/api'
 
 let extractedSkills = []
 
+function togglePassword(id) {
+  const input = document.getElementById(id)
+  input.type = input.type === 'password' ? 'text' : 'password'
+}
+
 document.getElementById('resumeFile').addEventListener('change', async (e) => {
   const file = e.target.files[0]
   if (!file) return
@@ -78,6 +83,21 @@ async function signup() {
     return
   }
 
+  if (password.length < 8) {
+    alert('Password must be at least 8 characters')
+    return
+  }
+
+  if (!/[0-9]/.test(password)) {
+    alert('Password must contain at least one number')
+    return
+  }
+
+  if (!/[!@#$%^&*]/.test(password)) {
+    alert('Password must contain at least one special character (!@#$%^&*)')
+    return
+  }
+
   const btn = document.getElementById('signupBtn')
   btn.textContent = 'Creating your account...'
   btn.disabled = true
@@ -108,29 +128,7 @@ async function signup() {
     localStorage.setItem('pathmind_user_name', data.name)
 
     btn.textContent = 'Generating your AI roadmap...'
-    
-    if (password.length < 8) {
-        alert('Password must be at least 8 characters')
-        btn.textContent = 'Create account and generate roadmap'
-        btn.disabled = false
-        return
-    }
 
-    if (!/[0-9]/.test(password)) {
-        alert('Password must contain at least one number')
-        btn.textContent = 'Create account and generate roadmap'
-        btn.disabled = false
-        return
-    }
-
-    if (!/[!@#$%^&*]/.test(password)) {
-         alert('Password must contain at least one special character (!@#$%^&*)')
-        btn.textContent = 'Create account and generate roadmap'
-        btn.disabled = false
-        return
-    }
-
-    
     const roadmapResponse = await fetch(`${BASE_URL}/roadmap/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

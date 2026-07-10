@@ -1,5 +1,11 @@
 const BASE_URL = 'https://pathmind-awrt.onrender.com/api'
 
+function togglePassword(id) {
+  const input = document.getElementById(id)
+  input.type = input.type === 'password' ? 'text' : 'password'
+}
+
+
 async function login() {
   const email = document.getElementById('email').value.trim()
   const password = document.getElementById('password').value
