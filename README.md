@@ -1,6 +1,6 @@
 # PathMind — AI-Powered Career Roadmap
 
-**Live Demo:** [pathmind.netlify.app](https://pathmind.netlify.app)
+**Live Demo:** [pathmind-ten.vercel.app](https://pathmind-ten.vercel.app)
 
 ---
 
@@ -215,4 +215,4 @@ Pathmind/
 
 I'm Niriksha Shetty, a 6th semester Electronics and Communication Engineering student from Bengaluru. I built PathMind as a placement portfolio project but also because I genuinely needed something like this myself.
 
-If you're a student preparing for placements — [try it here](https://pathmind.netlify.app).
+If you're a student preparing for placements — [try it here](https://pathmind-ten.vercel.app).

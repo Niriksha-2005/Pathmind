@@ -38,7 +38,16 @@ const authLimiter = rateLimit({
   message: { error: 'Too many login attempts. Please try again after 15 minutes.' }
 })
 
-app.use(cors())
+app.use(cors({
+  origin: [
+    'https://pathmind-ten.vercel.app',
+    'https://pathmind.netlify.app',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500'
+  ],
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+  credentials: true
+}))
 app.use(express.json())
 app.use(generalLimiter)
 
