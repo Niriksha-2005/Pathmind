@@ -1043,3 +1043,99 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+/* Smooth transitions */
+* {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+/* Page fade in */
+body {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Card hover lift effect */
+.week-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.1);
+}
+
+.feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.1);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Button press effect */
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+.time-btn:active {
+  transform: scale(0.97);
+}
+
+/* Input focus glow */
+.form-group input:focus,
+.form-group select:focus {
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+/* Notification dropdown slide in */
+.notification-dropdown {
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Quiz modal fade in */
+.quiz-modal-content {
+  animation: modalIn 0.25s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Progress circle smooth update */
+.progress-circle {
+  transition: background 0.6s ease;
+}
+
+/* Skill tags hover */
+.skill-tag:hover {
+  opacity: 0.85;
+  cursor: default;
+}
+
+/* Option label hover */
+.option-label:hover {
+  background: #111;
+  border-color: #6c63ff;
+  color: white;
+}
+
+/* Week card transition */
+.week-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.feature-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
