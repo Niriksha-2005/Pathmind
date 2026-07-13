@@ -1564,3 +1564,53 @@ input:checked + .slider::before {
   transform: translateX(22px);
   background: #6c63ff;
 }
+
+body.light-mode .form-group select option {
+  background: #ffffff;
+  color: #111;
+}
+
+body.light-mode select {
+  background: #f5f5f5;
+  color: #111;
+  border-color: #ddd;
+}
+
+body.light-mode input {
+  background: #f5f5f5;
+  color: #111;
+  border-color: #ddd;
+}
+
+body.light-mode .upload-box {
+  border-color: #ddd;
+  color: #555;
+}
+
+body.light-mode .upload-hint {
+  color: #999;
+}
+
+body.light-mode small {
+  color: #777;
+}
+
+body.light-mode .auth-switch {
+  color: #555;
+}
+
+body.light-mode .onboarding-header p {
+  color: #555;
+}
+
+body.light-mode .resume-upload-section h3 {
+  color: #111;
+}
+
+body.light-mode .upload-subtitle {
+  color: #555;
+}
+
+body.light-mode .form-group label {
+  color: #333;
+}
