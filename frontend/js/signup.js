@@ -4,7 +4,15 @@ let extractedSkills = []
 
 function togglePassword(id) {
   const input = document.getElementById(id)
-  input.type = input.type === 'password' ? 'text' : 'password'
+  const icon = input.nextElementSibling.querySelector('svg')
+  
+  if (input.type === 'password') {
+    input.type = 'text'
+    icon.setAttribute('stroke', '#6c63ff')
+  } else {
+    input.type = 'password'
+    icon.setAttribute('stroke', '#666')
+  }
 }
 
 document.getElementById('resumeFile').addEventListener('change', async (e) => {

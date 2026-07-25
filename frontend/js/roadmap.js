@@ -20,6 +20,7 @@ document.getElementById('roadmapSubtitle').textContent =
 let currentQuiz = null
 let currentTopic = null
 let currentBtn = null
+let currentDifficulty = 'medium'
 
 async function loadProgress() {
   try {
@@ -39,15 +40,22 @@ async function startQuiz(topicName, btn) {
   btn.disabled = true
 
   try {
-    const response = await fetch(`${BASE_URL}/quiz/generate`, {
+    const response = await fetch(`${BASE_URL}/quiz/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ topic: topicName })
+      body: JSON.stringify({
+        user_id: userId,
+        topic_name: currentTopic,
+        answers,
+        correct_answers: correctAnswers,
+        difficulty: currentDifficulty
+      })
     })
 
     const data = await response.json()
     currentQuiz = data.questions
-    showQuizModal(topicName, data.questions)
+    currentDifficulty = data.difficulty
+    showQuizModal(topicName, data.questions, data.difficulty)
 
   } catch (err) {
     btn.textContent = 'Take quiz to complete'
@@ -56,12 +64,15 @@ async function startQuiz(topicName, btn) {
   }
 }
 
-function showQuizModal(topic, questions) {
+function showQuizModal(topic, questions, difficulty) {
   const modal = document.getElementById('quizModal')
   const modalTitle = document.getElementById('quizTopic')
   const quizBody = document.getElementById('quizBody')
 
-  modalTitle.textContent = `Quiz — ${topic}`
+  const difficultyColor = difficulty === 'hard' ? '#f44336' : difficulty === 'easy' ? '#4caf50' : '#ff9800'
+
+  modalTitle.innerHTML = `Quiz — ${topic} <span style="font-size:0.8rem; padding:2px 10px; border-radius:20px; background:${difficultyColor}22; color:${difficultyColor};">${difficulty}</span>`
+
   quizBody.innerHTML = ''
 
   questions.forEach((q, index) => {

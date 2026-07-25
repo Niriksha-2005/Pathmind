@@ -4,22 +4,49 @@ const db = require('../config/db')
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
 const generateQuiz = async (req, res) => {
-  const { topic } = req.body
+  const { topic, user_id } = req.body
 
   if (!topic) {
     return res.status(400).json({ error: 'Topic is required' })
   }
 
   try {
+    let difficulty = 'medium'
+
+    if (user_id) {
+      const perfQuery = `
+        SELECT AVG(score) as avg_score, COUNT(*) as attempts
+        FROM quiz_performance
+        WHERE user_id = ? AND topic_name = ?
+      `
+
+      await new Promise((resolve) => {
+        db.query(perfQuery, [user_id, topic], (err, result) => {
+          if (!err && result[0].attempts > 0) {
+            const avg = result[0].avg_score
+            if (avg >= 2.5) difficulty = 'hard'
+            else if (avg <= 1) difficulty = 'easy'
+            else difficulty = 'medium'
+          }
+          resolve()
+        })
+      })
+    }
+
     const completion = await groq.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
       messages: [
         {
           role: 'user',
           content: `
-          Generate exactly 3 multiple choice questions to test a student's understanding of: ${topic}
+          Generate exactly 3 ${difficulty} difficulty multiple choice questions to test a student's understanding of: ${topic}
 
           These questions are for Indian engineering students preparing for placements.
+
+          Difficulty guide:
+          - easy: basic concept questions, definitions, simple examples
+          - medium: application based, moderate complexity
+          - hard: advanced problem solving, edge cases, optimization
 
           Return ONLY a JSON array with no extra text, no markdown, no explanation.
 
@@ -33,11 +60,10 @@ const generateQuiz = async (req, res) => {
           ]
 
           Rules:
-          - correct is the index (0,1,2,3) of the correct option in the options array
-          - Make questions practical and interview relevant
-          - Difficulty should be medium
+          - correct is the index (0,1,2,3) of the correct option
           - Return exactly 3 questions
           - Only return the JSON array, nothing else
+          - Difficulty must be ${difficulty}
           `
         }
       ]
@@ -45,11 +71,11 @@ const generateQuiz = async (req, res) => {
 
     let text = completion.choices[0].message.content
     text = text.replace(/```json/g, '').replace(/```/g, '').trim()
-
     const questions = JSON.parse(text)
 
     res.json({
       topic,
+      difficulty,
       questions
     })
 
@@ -68,6 +94,15 @@ const submitQuiz = async (req, res) => {
 
   const passed = score >= 2
 
+  // Save performance to database
+  const perfInsert = `
+    INSERT INTO quiz_performance (user_id, topic_name, score, total)
+    VALUES (?, ?, ?, 3)
+  `
+  db.query(perfInsert, [user_id, topic_name, score], (err) => {
+    if (err) console.log('Performance save error:', err.message)
+  })
+
   if (passed) {
     const checkQuery = `SELECT * FROM progress WHERE user_id = ? AND topic_name = ?`
     db.query(checkQuery, [user_id, topic_name], (err, existing) => {
@@ -77,21 +112,33 @@ const submitQuiz = async (req, res) => {
         const updateQuery = `UPDATE progress SET status = 'completed', completed_at = NOW() WHERE user_id = ? AND topic_name = ?`
         db.query(updateQuery, [user_id, topic_name], (err) => {
           if (err) return res.status(500).json({ error: err.message })
-          res.json({ passed: true, score, message: 'Quiz passed! Topic marked as completed.' })
+          res.json({
+            passed: true,
+            score,
+            difficulty: req.body.difficulty || 'medium',
+            message: `Quiz passed with ${score}/3! Topic marked as completed.`
+          })
         })
       } else {
         const insertQuery = `INSERT INTO progress (user_id, topic_name, status, completed_at) VALUES (?, ?, 'completed', NOW())`
         db.query(insertQuery, [user_id, topic_name], (err) => {
           if (err) return res.status(500).json({ error: err.message })
-          res.json({ passed: true, score, message: 'Quiz passed! Topic marked as completed.' })
+          res.json({
+            passed: true,
+            score,
+            difficulty: req.body.difficulty || 'medium',
+            message: `Quiz passed with ${score}/3! Topic marked as completed.`
+          })
         })
       }
     })
   } else {
+    const nextDifficulty = score === 0 ? 'easy' : 'medium'
     res.json({
       passed: false,
       score,
-      message: `You got ${score}/3. You need at least 2/3 to pass. Study more and try again.`
+      difficulty: req.body.difficulty || 'medium',
+      message: `You got ${score}/3. You need at least 2/3 to pass. Try again — next quiz will be ${nextDifficulty} difficulty.`
     })
   }
 }
@@ -162,10 +209,7 @@ const getMockQuestions = async (req, res) => {
         text = text.replace(/[\x00-\x1F\x7F]/g, ' ')
         const questions = JSON.parse(text)
 
-        res.json({
-          topic: currentTopic,
-          questions
-        })
+        res.json({ topic: currentTopic, questions })
 
       } catch (err) {
         res.status(500).json({ error: err.message })
