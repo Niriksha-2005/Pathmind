@@ -39,6 +39,9 @@ async function startQuiz(topicName, btn) {
   btn.textContent = 'Loading quiz...'
   btn.disabled = true
 
+  console.log('Starting quiz for topic:', topicName, 'user:', userId)
+
+
   try {
     const response = await fetch(`${BASE_URL}/quiz/submit`, {
       method: 'POST',
@@ -58,10 +61,11 @@ async function startQuiz(topicName, btn) {
     showQuizModal(topicName, data.questions, data.difficulty)
 
   } catch (err) {
+    console.log('Quiz error:', err)
     btn.textContent = 'Take quiz to complete'
     btn.disabled = false
-    alert('Error loading quiz. Please try again.')
-  }
+    alert('Error: ' + err.message)
+   }
 }
 
 function showQuizModal(topic, questions, difficulty) {
