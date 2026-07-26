@@ -1631,3 +1631,43 @@ body.light-mode .form-group label {
   background: #6c63ff;
   color: white;
 }
+
+.resource-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+}
+
+.resource-link {
+  text-decoration: none;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.resource-badge {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.resource-badge.free {
+  background: #0d2b1a;
+  color: #4caf50;
+}
+
+.resource-badge.paid {
+  background: #2b1a0d;
+  color: #ff9800;
+}
+
+.resource-link.free {
+  color: #6c63ff;
+}
+
+.resource-link.paid {
+  color: #ff9800;
+}
