@@ -85,7 +85,7 @@ const generateQuiz = async (req, res) => {
 }
 
 const submitQuiz = async (req, res) => {
-  const { user_id, topic_name, answers, correct_answers } = req.body
+  const { user_id, topic_name, answers, correct_answers,difficulty, practice_mode  } = req.body
 
   let score = 0
   answers.forEach((answer, index) => {
@@ -96,12 +96,22 @@ const submitQuiz = async (req, res) => {
 
   // Save performance to database
   const perfInsert = `
-    INSERT INTO quiz_performance (user_id, topic_name, score, total)
-    VALUES (?, ?, ?, 3)
+    INSERT INTO quiz_performance (user_id, topic_name, score, total,difficulty)
+    VALUES (?, ?, ?, 3,?)
   `
-  db.query(perfInsert, [user_id, topic_name, score], (err) => {
+  db.query(perfInsert, [user_id, topic_name, score,difficulty || 'medium'], (err) => {
     if (err) console.log('Performance save error:', err.message)
   })
+
+  if (practice_mode) {
+    return res.json({
+      passed,
+      score,
+      difficulty: difficulty || 'medium',
+      practice_mode: true,
+      message: `You scored ${score}/3 on ${difficulty || 'medium'} difficulty.`
+    })
+  }
 
   if (passed) {
     const checkQuery = `SELECT * FROM progress WHERE user_id = ? AND topic_name = ?`
@@ -133,12 +143,12 @@ const submitQuiz = async (req, res) => {
       }
     })
   } else {
-    const nextDifficulty = score === 0 ? 'easy' : 'medium'
+    
     res.json({
       passed: false,
       score,
       difficulty: req.body.difficulty || 'medium',
-      message: `You got ${score}/3. You need at least 2/3 to pass. Try again — next quiz will be ${nextDifficulty} difficulty.`
+      message: `You got ${score}/3. You need at least 2/3 to pass. Try again! `
     })
   }
 }

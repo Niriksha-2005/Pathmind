@@ -21,6 +21,7 @@ let currentQuiz = null
 let currentTopic = null
 let currentBtn = null
 let currentDifficulty = 'medium'
+let isPracticeMode = false
 
 async function loadProgress() {
   try {
@@ -35,11 +36,10 @@ async function loadProgress() {
 async function startQuiz(topicName, btn) {
   currentTopic = topicName
   currentBtn = btn
+  isPracticeMode = false
 
   btn.textContent = 'Loading quiz...'
   btn.disabled = true
-
-  console.log('Starting quiz for topic:', topicName, 'user:', userId)
 
   try {
     const response = await fetch(`${BASE_URL}/quiz/generate`, {
@@ -60,7 +60,40 @@ async function startQuiz(topicName, btn) {
     console.log('Quiz error:', err)
     btn.textContent = 'Take quiz to complete'
     btn.disabled = false
-    alert('Error: ' + err.message)
+    alert('Error loading quiz. Please try again.')
+  }
+}
+
+async function practiceQuiz(topicName, btn) {
+  currentTopic = topicName
+  currentBtn = btn
+  isPracticeMode = true
+
+  btn.textContent = 'Loading...'
+  btn.disabled = true
+
+  try {
+    const response = await fetch(`${BASE_URL}/quiz/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        topic: topicName,
+        user_id: userId
+      })
+    })
+
+    const data = await response.json()
+    currentQuiz = data.questions
+    currentDifficulty = data.difficulty
+    showQuizModal(topicName, data.questions, data.difficulty)
+
+  } catch (err) {
+    btn.textContent = 'Practice again'
+    btn.disabled = false
+    alert('Error loading quiz. Please try again.')
+  } finally {
+    btn.textContent = 'Practice again'
+    btn.disabled = false
   }
 }
 
@@ -93,7 +126,7 @@ function showQuizModal(topic, questions, difficulty) {
   })
 
   modal.classList.remove('hidden')
-  currentBtn.textContent = 'Take quiz to complete'
+  currentBtn.textContent = isPracticeMode ? 'Practice again' : 'Take quiz to complete'
   currentBtn.disabled = false
 }
 
@@ -122,22 +155,42 @@ async function submitQuiz() {
         user_id: userId,
         topic_name: currentTopic,
         answers,
-        correct_answers: correctAnswers
+        correct_answers: correctAnswers,
+        difficulty: currentDifficulty,
+        practice_mode: isPracticeMode
       })
     })
 
     const data = await response.json()
 
-    if (data.passed) {
-      alert(`✅ ${data.message}`)
+    if (isPracticeMode) {
       closeQuizModal()
-      currentBtn.textContent = 'Completed ✅'
-      currentBtn.classList.add('completed')
-      currentBtn.disabled = true
-      currentBtn.closest('.week-card').classList.add('completed')
+      isPracticeMode = false
+
+      if (data.score === 3) {
+        alert(`🔥 Perfect score! ${data.score}/3 on ${currentDifficulty} difficulty. Next practice will be harder!`)
+      } else if (data.score >= 2) {
+        alert(`✅ Good job! ${data.score}/3 on ${currentDifficulty} difficulty. Keep practicing!`)
+      } else {
+        alert(`📚 You got ${data.score}/3 on ${currentDifficulty} difficulty. Next practice will be easier. Keep trying!`)
+      }
+
     } else {
-      alert(`❌ ${data.message}`)
-      closeQuizModal()
+      if (data.passed) {
+        alert(`✅ ${data.message}`)
+        closeQuizModal()
+        currentBtn.textContent = 'Completed ✅'
+        currentBtn.classList.add('completed')
+        currentBtn.disabled = true
+        currentBtn.closest('.week-card').classList.add('completed')
+
+        const practiceBtn = currentBtn.nextElementSibling
+        if (practiceBtn) practiceBtn.style.display = 'inline-block'
+
+      } else {
+        alert(`❌ ${data.message}`)
+        closeQuizModal()
+      }
     }
 
   } catch (err) {
@@ -146,6 +199,7 @@ async function submitQuiz() {
 
   submitBtn.textContent = 'Submit answers'
   submitBtn.disabled = false
+  isPracticeMode = false
 }
 
 function closeQuizModal() {
@@ -180,9 +234,9 @@ async function renderRoadmap() {
       <div class="week-actions">
         ${isCompleted ? `
           <button class="btn-done completed" disabled>
-           Completed ✅
+            Completed ✅
           </button>
-          <button class="btn-practice" onclick="startQuiz('${week.topic}', this)">
+          <button class="btn-practice" onclick="practiceQuiz('${week.topic}', this)">
             Practice again
           </button>
         ` : `
