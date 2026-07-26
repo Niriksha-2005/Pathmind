@@ -178,11 +178,19 @@ async function renderRoadmap() {
         <a href="${week.resource_url}" target="_blank">${week.resource_name}</a>
       </div>
       <div class="week-actions">
-        <button class="btn-done ${isCompleted ? 'completed' : ''}"
-          onclick="startQuiz('${week.topic}', this)"
-          ${isCompleted ? 'disabled' : ''}>
-          ${isCompleted ? 'Completed ✅' : 'Take quiz to complete'}
-        </button>
+        ${isCompleted ? `
+          <button class="btn-done completed" disabled>
+           Completed ✅
+          </button>
+          <button class="btn-practice" onclick="startQuiz('${week.topic}', this)">
+            Practice again
+          </button>
+        ` : `
+          <button class="btn-done"
+            onclick="startQuiz('${week.topic}', this)">
+            Take quiz to complete
+          </button>
+        `}
         <span class="week-hours">Week ${week.week}</span>
       </div>
     `

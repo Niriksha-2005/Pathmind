@@ -1614,3 +1614,20 @@ body.light-mode .upload-subtitle {
 body.light-mode .form-group label {
   color: #333;
 }
+
+.btn-practice {
+  background: transparent;
+  border: 1px solid #6c63ff;
+  color: #6c63ff;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+  margin-top: 0.3rem;
+}
+
+.btn-practice:hover {
+  background: #6c63ff;
+  color: white;
+}
