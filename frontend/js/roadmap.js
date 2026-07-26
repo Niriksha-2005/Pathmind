@@ -41,17 +41,13 @@ async function startQuiz(topicName, btn) {
 
   console.log('Starting quiz for topic:', topicName, 'user:', userId)
 
-
   try {
-    const response = await fetch(`${BASE_URL}/quiz/submit`, {
+    const response = await fetch(`${BASE_URL}/quiz/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        user_id: userId,
-        topic_name: currentTopic,
-        answers,
-        correct_answers: correctAnswers,
-        difficulty: currentDifficulty
+        topic: topicName,
+        user_id: userId
       })
     })
 
@@ -65,7 +61,7 @@ async function startQuiz(topicName, btn) {
     btn.textContent = 'Take quiz to complete'
     btn.disabled = false
     alert('Error: ' + err.message)
-   }
+  }
 }
 
 function showQuizModal(topic, questions, difficulty) {
