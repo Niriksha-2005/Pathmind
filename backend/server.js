@@ -12,6 +12,8 @@ const resumeRoutes = require('./routes/resumeRoutes')
 const authRoutes = require('./routes/authRoutes')
 const quizRoutes = require('./routes/quizRoutes')
 const notificationRoutes = require('./routes/notificationRoutes')
+const resourceRoutes = require('./routes/resourceRoutes')
+
 
 dotenv.config()
 
@@ -64,6 +66,7 @@ app.use('/api/progress', progressRoutes)
 app.use('/api/schedule', scheduleRoutes)
 app.use('/api/readiness', readinessRoutes)
 app.use('/api/notifications', notificationRoutes)
+app.use('/api/resources', resourceRoutes)
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {

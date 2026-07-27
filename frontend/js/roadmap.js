@@ -97,10 +97,45 @@ async function practiceQuiz(topicName, btn) {
   }
 }
 
+async function showMoreResources(topic) {
+  try {
+    const response = await fetch(`${BASE_URL}/resources/${encodeURIComponent(topic)}`)
+    const data = await response.json()
+
+    const modal = document.getElementById('quizModal')
+    const modalTitle = document.getElementById('quizTopic')
+    const quizBody = document.getElementById('quizBody')
+    const footer = document.querySelector('.quiz-footer')
+
+    modalTitle.textContent = `Resources — ${topic}`
+    footer.style.display = 'none'
+
+    if (!data.resources || data.resources.length === 0) {
+      quizBody.innerHTML = '<p style="color:#aaa; text-align:center;">No additional resources found for this topic.</p>'
+    } else {
+      quizBody.innerHTML = data.resources.map(r => `
+        <div class="resource-card">
+          <span class="resource-badge ${r.is_free ? 'free' : 'paid'}">${r.is_free ? 'Free' : 'Paid'}</span>
+          <span class="resource-type-badge">${r.resource_type}</span>
+          <a href="${r.resource_url}" target="_blank" class="resource-card-link">${r.resource_name}</a>
+        </div>
+      `).join('')
+    }
+
+    modal.classList.remove('hidden')
+
+  } catch (err) {
+    alert('Error loading resources.')
+  }
+}
+
 function showQuizModal(topic, questions, difficulty) {
   const modal = document.getElementById('quizModal')
   const modalTitle = document.getElementById('quizTopic')
   const quizBody = document.getElementById('quizBody')
+  const footer = document.querySelector('.quiz-footer')
+
+  footer.style.display = 'block'
 
   const difficultyColor = difficulty === 'hard' ? '#f44336' : difficulty === 'easy' ? '#4caf50' : '#ff9800'
 
@@ -183,10 +218,6 @@ async function submitQuiz() {
         currentBtn.classList.add('completed')
         currentBtn.disabled = true
         currentBtn.closest('.week-card').classList.add('completed')
-
-        const practiceBtn = currentBtn.nextElementSibling
-        if (practiceBtn) practiceBtn.style.display = 'inline-block'
-
       } else {
         alert(`❌ ${data.message}`)
         closeQuizModal()
@@ -204,6 +235,7 @@ async function submitQuiz() {
 
 function closeQuizModal() {
   document.getElementById('quizModal').classList.add('hidden')
+  document.querySelector('.quiz-footer').style.display = 'block'
   currentQuiz = null
   currentTopic = null
 }
@@ -234,12 +266,9 @@ async function renderRoadmap() {
             <span class="resource-badge free">Free</span>
             ${week.resource_name}
           </a>
-          ${week.paid_resource_url ? `
-            <a href="${week.paid_resource_url}" target="_blank" class="resource-link paid">
-              <span class="resource-badge paid">Paid</span>
-              ${week.paid_resource_name}
-            </a>
-          ` : ''}
+          <span class="more-resources-btn" onclick="showMoreResources('${week.topic}')">
+            + More resources
+          </span>
         </div>
       </div>
       <div class="week-actions">
