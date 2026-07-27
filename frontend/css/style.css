@@ -103,6 +103,17 @@ body {
   border-color: #666;
 }
 
+body.light-mode .btn-secondary {
+  color: #333;
+  border-color: #999;
+}
+
+body.light-mode .btn-secondary:hover {
+  color: #111;
+  border-color: #333;
+  background: #e0e0e0;
+}
+
 .hero-stats {
   display: flex;
   gap: 1.5rem;
@@ -1713,4 +1724,33 @@ body.light-mode .form-group label {
   border-radius: 20px;
   background: #1a1a2e;
   color: #aaa;
+}
+
+body.light-mode .notif-item {
+  color: #111;
+}
+
+body.light-mode .notif-item.success {
+  background: #e8f5e9;
+  border-left: 3px solid #4caf50;
+}
+
+body.light-mode .notif-item.warning {
+  background: #fff3e0;
+  border-left: 3px solid #ff9800;
+}
+
+body.light-mode .notif-item.danger {
+  background: #fde8e8;
+  border-left: 3px solid #f44336;
+}
+
+body.light-mode .notif-item.motivation {
+  background: #f3e5f5;
+  border-left: 3px solid #9c27b0;
+}
+
+body.light-mode .notif-item.info {
+  background: #e3f2fd;
+  border-left: 3px solid #2196f3;
 }
