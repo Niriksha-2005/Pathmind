@@ -13,7 +13,7 @@ const authRoutes = require('./routes/authRoutes')
 const quizRoutes = require('./routes/quizRoutes')
 const notificationRoutes = require('./routes/notificationRoutes')
 const resourceRoutes = require('./routes/resourceRoutes')
-
+const verifyToken = require('./middleware/authMiddleware')
 
 dotenv.config()
 
@@ -66,6 +66,18 @@ app.use('/api/progress', progressRoutes)
 app.use('/api/schedule', scheduleRoutes)
 app.use('/api/readiness', readinessRoutes)
 app.use('/api/notifications', notificationRoutes)
+app.use('/api/resources', resourceRoutes)
+app.use('/api/auth', authLimiter, authRoutes)
+
+
+app.use('/api/roadmap', verifyToken, aiLimiter, roadmapRoutes)
+app.use('/api/resume', verifyToken, aiLimiter, resumeRoutes)
+app.use('/api/quiz', verifyToken, aiLimiter, quizRoutes)
+app.use('/api/progress', verifyToken, progressRoutes)
+app.use('/api/schedule', verifyToken, scheduleRoutes)
+app.use('/api/readiness', verifyToken, readinessRoutes)
+app.use('/api/notifications', verifyToken, notificationRoutes)
+app.use('/api/users', verifyToken, userRoutes)
 app.use('/api/resources', resourceRoutes)
 
 const PORT = process.env.PORT || 5000

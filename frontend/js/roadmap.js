@@ -2,7 +2,9 @@ const BASE_URL = 'https://pathmind-awrt.onrender.com/api'
 
 const userId = localStorage.getItem('pathmind_user_id')
 const userName = localStorage.getItem('pathmind_user_name')
+const token = localStorage.getItem('pathmind_token')
 const rawRoadmap = localStorage.getItem('pathmind_roadmap')
+
 let roadmap = []
 try {
   roadmap = rawRoadmap ? JSON.parse(rawRoadmap) : []
@@ -10,8 +12,16 @@ try {
   roadmap = []
 }
 
-if (!userId) {
-  window.location.href = 'onboarding.html'
+// Auth check — redirect to login if not logged in
+if (!userId || !token) {
+  window.location.href = 'login.html'
+}
+
+function authHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  }
 }
 
 document.getElementById('roadmapSubtitle').textContent =
@@ -25,7 +35,9 @@ let isPracticeMode = false
 
 async function loadProgress() {
   try {
-    const response = await fetch(`${BASE_URL}/progress/${userId}`)
+    const response = await fetch(`${BASE_URL}/progress/${userId}`, {
+      headers: authHeaders()
+    })
     const data = await response.json()
     return data.topics || []
   } catch (err) {
@@ -44,7 +56,7 @@ async function startQuiz(topicName, btn) {
   try {
     const response = await fetch(`${BASE_URL}/quiz/generate`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeaders(),
       body: JSON.stringify({
         topic: topicName,
         user_id: userId
@@ -75,7 +87,7 @@ async function practiceQuiz(topicName, btn) {
   try {
     const response = await fetch(`${BASE_URL}/quiz/generate`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeaders(),
       body: JSON.stringify({
         topic: topicName,
         user_id: userId
@@ -185,7 +197,7 @@ async function submitQuiz() {
   try {
     const response = await fetch(`${BASE_URL}/quiz/submit`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeaders(),
       body: JSON.stringify({
         user_id: userId,
         topic_name: currentTopic,
