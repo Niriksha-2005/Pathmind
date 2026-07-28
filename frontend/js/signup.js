@@ -31,7 +31,10 @@ document.getElementById('resumeFile').addEventListener('change', async (e) => {
       body: formData
     })
 
+    
     const data = await response.json()
+    console.log('Signup response:', data)
+    console.log('Token received:', data.token)
 
     if (data.analysis) {
       extractedSkills = data.analysis.skills
