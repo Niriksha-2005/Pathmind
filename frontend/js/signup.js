@@ -31,10 +31,7 @@ document.getElementById('resumeFile').addEventListener('change', async (e) => {
       body: formData
     })
 
-    
     const data = await response.json()
-    console.log('Signup response:', data)
-    console.log('Token received:', data.token)
 
     if (data.analysis) {
       extractedSkills = data.analysis.skills
@@ -114,6 +111,7 @@ async function signup() {
   btn.disabled = true
 
   try {
+    // Step 1 - create account
     const response = await fetch(`${BASE_URL}/auth/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -126,6 +124,7 @@ async function signup() {
     })
 
     const data = await response.json()
+    console.log('Signup response:', data)
 
     if (data.error) {
       alert(data.error)
@@ -140,9 +139,13 @@ async function signup() {
 
     btn.textContent = 'Generating your AI roadmap...'
 
+    // Step 2 - generate roadmap with token
     const roadmapResponse = await fetch(`${BASE_URL}/roadmap/generate`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${data.token}`
+      },
       body: JSON.stringify({
         user_id: data.userId,
         branch, goal,
@@ -153,9 +156,10 @@ async function signup() {
     })
 
     const roadmapData = await roadmapResponse.json()
+    console.log('Roadmap response:', roadmapData)
 
     if (!roadmapData.roadmap) {
-      throw new Error('Roadmap generation failed')
+      throw new Error('Roadmap generation failed: ' + JSON.stringify(roadmapData))
     }
 
     localStorage.setItem('pathmind_roadmap', JSON.stringify(roadmapData.roadmap))
@@ -164,6 +168,7 @@ async function signup() {
     window.location.href = 'roadmap.html'
 
   } catch (err) {
+    console.log('Error:', err.message)
     alert('Error: ' + err.message)
     btn.textContent = 'Create account and generate roadmap'
     btn.disabled = false
