@@ -15,7 +15,11 @@ const levelColors = {
 
 async function loadReadiness() {
   try {
-    const response = await fetch(`${BASE_URL}/readiness/${userId}`)
+    const response = await fetch(`${BASE_URL}/readiness/${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('pathmind_token')}`
+      }
+    })
     const data = await response.json()
 
     document.getElementById('readinessSubtitle').textContent =

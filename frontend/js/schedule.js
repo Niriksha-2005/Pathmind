@@ -16,7 +16,10 @@ async function getSchedule(minutes) {
   try {
     const response = await fetch(`${BASE_URL}/schedule/today`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('pathmind_token')}`
+      },
       body: JSON.stringify({ user_id: userId, available_minutes: minutes })
     })
 
@@ -84,7 +87,10 @@ async function loadMockQuestions() {
   try {
     const response = await fetch(`${BASE_URL}/quiz/mock`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('pathmind_token')}` 
+      },
       body: JSON.stringify({ user_id: userId })
     })
 

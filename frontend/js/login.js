@@ -49,7 +49,6 @@ async function login() {
     const roadmapResponse = await fetch(`${BASE_URL}/roadmap/generate`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${data.token}`
       }
     })

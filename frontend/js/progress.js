@@ -8,7 +8,11 @@ if (!userId) {
 
 async function loadProgress() {
   try {
-    const response = await fetch(`${BASE_URL}/progress/${userId}`)
+    const response = await fetch(`${BASE_URL}/progress/${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('pathmind_token')}`
+      }
+    })
     const data = await response.json()
 
     document.getElementById('progressSubtitle').textContent =

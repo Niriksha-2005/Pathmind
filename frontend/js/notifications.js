@@ -4,7 +4,11 @@ async function loadNotifications() {
   if (!notifUserId) return
 
   try {
-    const response = await fetch(`${NOTIF_BASE_URL}/notifications/${notifUserId}`)
+    const response = await fetch(`${NOTIF_BASE_URL}/notifications/${notifUserId}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('pathmind_token')}`
+      }
+    })
     const data = await response.json()
 
     if (!data.notifications) return
