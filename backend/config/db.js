@@ -13,16 +13,19 @@ const db = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
   enableKeepAlive: true,
-  keepAliveInitialDelay: 0
+  keepAliveInitialDelay: 10000,
+  connectTimeout: 60000
 })
 
-db.getConnection((err, connection) => {
-  if (err) {
-    console.log('Database connection failed:', err)
-    return
-  }
-  console.log('MySQL connected successfully')
-  connection.release()
-})
+// Keep connection alive every 5 minutes
+setInterval(() => {
+  db.query('SELECT 1', (err) => {
+    if (err) {
+      console.log('Keep alive query failed:', err.message)
+    }
+  })
+}, 300000)
+
+console.log('MySQL pool created successfully')
 
 module.exports = db
