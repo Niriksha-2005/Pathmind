@@ -51,6 +51,14 @@ const generateRoadmap = async (req, res) => {
 
     let text = completion.choices[0].message.content
     text = text.replace(/```json/g, '').replace(/```/g, '').trim()
+    text = text.replace(/[\x00-\x1F\x7F]/g, ' ')
+    text = text.replace(/,(\s*[}\]])/g, '$1')
+
+    const jsonStart = text.indexOf('[')
+    const jsonEnd = text.lastIndexOf(']')
+    if (jsonStart !== -1 && jsonEnd !== -1) {
+      text = text.substring(jsonStart, jsonEnd + 1)
+    }
 
     let roadmap = JSON.parse(text)
 
