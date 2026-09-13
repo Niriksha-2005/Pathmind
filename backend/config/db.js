@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 
 dotenv.config()
 
-const db = mysql.createPool({
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -13,18 +13,37 @@ const db = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
   enableKeepAlive: true,
-  keepAliveInitialDelay: 10000,
-  connectTimeout: 60000
+  keepAliveInitialDelay: 0,
+  connectTimeout: 60000,
+  acquireTimeout: 60000,
+  timeout: 60000
 })
 
-// Keep connection alive every 5 minutes
-setInterval(() => {
-  db.query('SELECT 1', (err) => {
-    if (err) {
-      console.log('Keep alive query failed:', err.message)
+const db = {
+  query: (sql, params, callback) => {
+    if (typeof params === 'function') {
+      callback = params
+      params = []
     }
+    pool.getConnection((err, connection) => {
+      if (err) {
+        console.log('Connection error:', err.message)
+        if (callback) callback(err)
+        return
+      }
+      connection.query(sql, params, (error, results) => {
+        connection.release()
+        if (callback) callback(error, results)
+      })
+    })
+  }
+}
+
+setInterval(() => {
+  pool.query('SELECT 1', (err) => {
+    if (err) console.log('Keepalive failed:', err.message)
   })
-}, 300000)
+}, 60000)
 
 console.log('MySQL pool created successfully')
 
