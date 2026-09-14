@@ -50,6 +50,7 @@ const generateRoadmap = async (req, res) => {
     })
 
     let text = completion.choices[0].message.content
+    console.log('RAW GROQ RESPONSE:', text)
 
     // Remove markdown
     text = text.replace(/```json/g, '').replace(/```/g, '').trim()
