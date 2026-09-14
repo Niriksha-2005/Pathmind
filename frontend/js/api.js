@@ -1,4 +1,4 @@
-const BASE_URL = 'https://pathmind-awrt.onrender.com/api'
+// const BASE_URL = 'https://pathmind-awrt.onrender.com/api'
 
 function getToken() {
   return localStorage.getItem('pathmind_token')
