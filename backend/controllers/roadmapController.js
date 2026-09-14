@@ -50,8 +50,7 @@ const generateRoadmap = async (req, res) => {
     })
 
     let text = completion.choices[0].message.content
-    console.log('RAW GROQ RESPONSE:', text)
-
+    
     // Remove markdown
     text = text.replace(/```json/g, '').replace(/```/g, '').trim()
 
@@ -68,8 +67,7 @@ const generateRoadmap = async (req, res) => {
 
     // Fix common JSON issues
     text = text.replace(/,(\s*[}\]])/g, '$1') // trailing commas
-    text = text.replace(/'/g, '"') // single to double quotes
-    text = text.replace(/(\w+):/g, '"$1":') // unquoted keys
+    
 
     let roadmap
     try {
