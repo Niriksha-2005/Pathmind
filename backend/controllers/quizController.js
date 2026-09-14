@@ -34,7 +34,7 @@ const generateQuiz = async (req, res) => {
     }
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+      model: process.env.GROQ_MODEL,
       messages: [
         {
           role: 'user',
@@ -71,6 +71,13 @@ const generateQuiz = async (req, res) => {
 
     let text = completion.choices[0].message.content
     text = text.replace(/```json/g, '').replace(/```/g, '').trim()
+    text = text.replace(/[\x00-\x1F\x7F]/g, ' ')
+    text = text.replace(/,(\s*[}\]])/g, '$1')
+    const jsonStart = text.indexOf('[')
+    const jsonEnd = text.lastIndexOf(']')
+    if (jsonStart !== -1 && jsonEnd !== -1) {
+      text = text.substring(jsonStart, jsonEnd + 1)
+    }
     const questions = JSON.parse(text)
 
     res.json({
@@ -182,7 +189,7 @@ const getMockQuestions = async (req, res) => {
 
       try {
         const completion = await groq.chat.completions.create({
-          model: 'llama-3.3-70b-versatile',
+          model: process.env.GROQ_MODEL,
           messages: [
             {
               role: 'user',
@@ -217,6 +224,12 @@ const getMockQuestions = async (req, res) => {
         let text = completion.choices[0].message.content
         text = text.replace(/```json/g, '').replace(/```/g, '').trim()
         text = text.replace(/[\x00-\x1F\x7F]/g, ' ')
+        text = text.replace(/,(\s*[}\]])/g, '$1')
+        const jsonStart = text.indexOf('[')
+        const jsonEnd = text.lastIndexOf(']')
+        if (jsonStart !== -1 && jsonEnd !== -1) {
+          text = text.substring(jsonStart, jsonEnd + 1)
+        }
         const questions = JSON.parse(text)
 
         res.json({ topic: currentTopic, questions })

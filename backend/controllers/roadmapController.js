@@ -50,17 +50,32 @@ const generateRoadmap = async (req, res) => {
     })
 
     let text = completion.choices[0].message.content
-    text = text.replace(/```json/g, '').replace(/```/g, '').trim()
-    text = text.replace(/[\x00-\x1F\x7F]/g, ' ')
-    text = text.replace(/,(\s*[}\]])/g, '$1')
 
+    // Remove markdown
+    text = text.replace(/```json/g, '').replace(/```/g, '').trim()
+
+    // Remove control characters
+    text = text.replace(/[\x00-\x1F\x7F]/g, ' ')
+
+    // Extract JSON array only
     const jsonStart = text.indexOf('[')
     const jsonEnd = text.lastIndexOf(']')
-    if (jsonStart !== -1 && jsonEnd !== -1) {
-      text = text.substring(jsonStart, jsonEnd + 1)
+    if (jsonStart === -1 || jsonEnd === -1) {
+      throw new Error('No valid JSON array found in response')
     }
+    text = text.substring(jsonStart, jsonEnd + 1)
 
-    let roadmap = JSON.parse(text)
+    // Fix common JSON issues
+    text = text.replace(/,(\s*[}\]])/g, '$1') // trailing commas
+    text = text.replace(/'/g, '"') // single to double quotes
+    text = text.replace(/(\w+):/g, '"$1":') // unquoted keys
+
+    let roadmap
+    try {
+      roadmap = JSON.parse(text)
+    } catch (parseErr) {
+      throw new Error('Failed to parse roadmap JSON: ' + parseErr.message)
+    }
 
     // Replace AI suggested resources with curated verified ones
     const enrichedRoadmap = await Promise.all(
