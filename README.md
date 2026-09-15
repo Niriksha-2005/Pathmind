@@ -52,11 +52,11 @@ PathMind is an AI-powered platform that takes your branch, goal, target company 
 |-------|-----------|
 | Frontend | HTML, CSS, JavaScript |
 | Backend | Node.js, Express |
-| Database | MySQL (Railway cloud) |
-| AI | Groq API — LLaMA 3.3 70b (free) |
+| Database | MySQL (Clever cloud) |
+| AI | Groq API — openai/gpt-oss-120b(free) |
 | Auth | JWT + bcryptjs |
 | File upload | Multer + pdfreader |
-| Deployment | Netlify (frontend) + Render (backend) |
+| Deployment | Vercel (frontend) + Render (backend) |
 
 ---
 
